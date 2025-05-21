@@ -1,64 +1,63 @@
-# SPI Master V2 - Verilog Implementation
+# SPI Master V2 – Verilog Implementation
 
 ## 📦 Project Overview
 
-This project implements a Verilog-based **SPI Master Controller** supporting:
+This project implements a Verilog-based **SPI Master Controller** that supports:
 
 - Multi-byte transmission
-- Configurable chip-select (CS) for up to 4 slave devices
-- Clean FSM-based architecture ready for feature extension
+- Configurable chip-select (CS) for up to 4 SPI slave devices
+- FSM-driven, modular RTL design suitable for educational or practical use
 
-This version is fully verified via ModelSim simulation and is suitable for learning, verification, or use in digital system design portfolios.
+> The design is verified through simulation in ModelSim and ready for further enhancements like clock division, FIFO buffering, and CPOL/CPHA support.
 
 ---
 
 ## 🔧 Key Features
 
-- ✅ Supports both single-byte and multi-byte transfers
-- ✅ Master generates SCLK and MOSI signals
-- ✅ Selectable chip-select line via `cs_sel`
-- ✅ `busy` and `done` handshake interface
-- ✅ Fully testbench-driven and simulation verified
+- ✅ Supports both single-byte and multi-byte transfers via `data_len`
+- ✅ Master generates `SCLK` and `MOSI` signals
+- ✅ Selectable chip-select line through `cs_sel` (active-low)
+- ✅ Provides `busy` and `done` control/status signals
+- ✅ Fully testbench-driven and verified in simulation
 
 ---
 
 ## 🧱 RTL Block Diagram
 
-<img src="doc/RTL_spi_master_v2_basic_multi_byte.png" alt="RTL Block Diagram" width="600">
+<img src="RTL_spi_master_v2_basic_multi_byte.png" alt="RTL Block Diagram" width="600"/>
 
 ---
 
 ## 📈 Simulation Waveform
 
-<img src="doc/wave_spi_master_v2_basic_multi_byte.png" alt="Simulation Waveform" width="600">
+<img src="wave_spi_master_v2_basic_multi_byte.png" alt="Simulation Waveform" width="600"/>
 
-### Description:
+### Simulation Details:
 
-- Transmitted sequence: `0xA5 → 0x3C → 0x7E`
-- `data_out` result: `0x80` due to all-zero MISO input
-- `done` goes high after the last byte is shifted
-- `cs_n = 4'b1101` → CS1 is active low throughout transmission
+- Transmission sequence: `0xA5`, `0x3C`, `0x7E` (3 bytes total)
+- MISO held at 0 → resulting `data_out = 0x80`
+- `cs_n = 4'b1101` indicates CS1 active
+- `done` goes high at the end of transmission
 
 ---
 
-## 🧪 Simulation Setup
+## 🧪 Simulation Environment
 
 - **Tool**: ModelSim Intel FPGA Edition 10.5b
-- **Files**: `spi_master_v2.v`, `spi_master_v2_tb.v`
-- **Test behavior**:
-  - System reset applied
-  - Injected 3 bytes via `data_in`
-  - Monitored outputs: `mosi`, `sclk`, `cs_n`, `data_out`, `done`
+- **Testbench**: `spi_master_v2_tb.v`
+- **Flow**:
+  - Reset system
+  - Send 3 bytes using testbench logic
+  - Observe SCLK, MOSI, CS, and output verification
 
 ---
 
-## 📁 Directory Structure
-spi_master_v2_project/
-├── doc/
-│   ├── RTL_spi_master_v2_basic_multi_byte.png
-│   └── wave_spi_master_v2_basic_multi_byte.png
-├── src/
-├── tb/
+## 📁 Project Structure
+spi_master_v2/
+├── spi_master_v2.v # RTL design
+├── spi_master_v2_tb.v # Testbench
+├── RTL_spi_master_v2_basic_multi_byte.png
+├── wave_spi_master_v2_basic_multi_byte.png
 └── README.md
 
 
